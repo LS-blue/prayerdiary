@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEAM ALO 중보기도 다이어리</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#faf9f6;color:#23282f;font-family:'Noto Sans KR',sans-serif;padding:52px 20px 80px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:540px;margin:0 auto}
+.brand{text-align:center;font-size:12px;font-weight:700;letter-spacing:.42em;color:#e1703c;margin-bottom:10px}
+h1{text-align:center;font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.date{text-align:center;font-size:13px;font-weight:400;color:#8a8f96;letter-spacing:.08em;margin-bottom:34px}
+.status{display:flex;align-items:center;justify-content:center;gap:14px;font-size:14px;color:#5b6068;margin-bottom:24px;flex-wrap:wrap}
+.status b{font-weight:700;color:#23282f}
+.status .lv{color:#7d9b3f;font-weight:500}
+.dots{display:flex;gap:6px}
+.dots i{width:7px;height:7px;border-radius:99px;background:#e3e1da;display:block;transition:background .3s}
+.dots i.on{background:#94b04a}
+.map-box{text-align:center;margin-bottom:28px}
+.map-svg{width:min(320px,100%);filter:drop-shadow(0 10px 26px rgba(240,134,63,.2))}
+.lit{fill:#fff7d6;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.map-cap{font-size:13px;font-weight:400;color:#8a8f96;letter-spacing:.06em;margin-top:12px}
+.card{background:#fff;border:1px solid #ebe9e2;border-radius:14px;padding:20px;margin-bottom:12px;transition:border-color .18s, box-shadow .18s}
+.topic-card{cursor:pointer}
+.topic-card:hover{border-color:#eda471;box-shadow:0 4px 18px rgba(225,112,60,.07)}
+.topic{display:flex;align-items:baseline;gap:12px}
+.num{font-size:14px;font-weight:700;color:#e1703c;flex-shrink:0}
+.topic-text{font-size:15.5px;font-weight:500;line-height:1.8;color:#23282f}
+.check{margin-left:auto;flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.05em;color:#7d9b3f;border:1px solid #cfe0a8;background:#f6f9ec;border-radius:99px;padding:3px 10px}
+.names{font-size:13px;font-weight:400;color:#9a9fa6;margin-top:12px;padding-top:11px;border-top:1px solid #f1efe8}
+.names b{font-weight:500;color:#5b6068}
+input,textarea{background:#fff;border:1px solid #dcd9d0;border-radius:10px;padding:13px 15px;color:#23282f;font-size:15px;font-family:'Noto Sans KR',sans-serif}
+input:focus,textarea:focus{outline:none;border-color:#e1703c;box-shadow:0 0 0 3px rgba(225,112,60,.13)}
+button{background:#23282f;color:#faf9f6;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity .15s}
+button:hover{opacity:.88}
+button:disabled{background:#d9d7d0;color:#faf9f6;cursor:default;opacity:1}
+button.ghost{background:transparent;color:#8a8f96;border:1px solid #dcd9d0}
+.typing-label{font-size:12px;font-weight:700;letter-spacing:.14em;color:#e1703c;margin-bottom:14px}
+.typing-target{font-size:16.5px;font-weight:500;line-height:2;margin-bottom:18px;word-break:keep-all}
+.ch.u{color:#c4c2ba}.ch.ok{color:#23282f}
+.ch.no{color:#c0522f;text-decoration:underline}
+.ch.cur{color:#c4c2ba;border-bottom:2px solid #e1703c}
+textarea{width:100%;min-height:112px;font-size:16px;line-height:1.85;resize:vertical}
+.actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.or{display:flex;align-items:center;gap:12px;margin:18px 0 12px;color:#b0aea6;font-size:12px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:#ebe9e2}
+.hold-btn{position:relative;width:100%;background:#fff;border:1.5px solid #cfe0a8;border-radius:12px;padding:15px;overflow:hidden;color:#7d9b3f;font-weight:700;font-size:14.5px;touch-action:none;user-select:none;-webkit-user-select:none}
+.hold-btn:hover{opacity:1}
+.hold-fill{position:absolute;inset:0;width:0;background:#e9f2d4;transition:width .05s linear}
+.hold-label{position:relative;z-index:1}
+.relay{padding:16px 18px}
+.relay-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:8px}
+.relay-toggle{font-size:12px;color:#8a8f96}
+.sec-title{font-size:12px;font-weight:700;letter-spacing:.24em;color:#8a8f96}
+.rk-row{display:flex;align-items:baseline;gap:12px;padding:12px 4px;border-bottom:1px solid #f1efe8;font-size:14px}
+.rk-row:last-of-type{border-bottom:none}
+.rk-row .m{width:26px;text-align:center;flex-shrink:0;font-size:13px;color:#8a8f96}
+.rk-row .nm{font-weight:700}
+.rk-row .lvt{font-size:11.5px;color:#7d9b3f;margin-left:6px;font-weight:500}
+.rk-row .s{margin-left:auto;font-size:12px;color:#8a8f96;flex-shrink:0}
+.rk-row .s b{font-weight:700;color:#23282f}
+.me{background:#f6f9ec;border-radius:8px;padding-left:8px;padding-right:8px}
+.empty{text-align:center;color:#b0aea6;font-size:13px;padding:18px 0}
+.loading{text-align:center;padding:100px 0;color:#8a8f96;font-size:14px}
+.intro{font-size:14px;color:#5b6068;margin-bottom:16px;line-height:1.7}
+.guide{background:#fdf8f3;border-color:#f0d9c6}
+.guide-title{font-size:13px;font-weight:700;letter-spacing:.18em;color:#e1703c;margin-bottom:14px}
+.guide ol{padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:14px;line-height:1.7;color:#3d434c}
+.guide ol li::marker{color:#e1703c;font-weight:700}
+.guide b{font-weight:700;color:#23282f}
+.guide-p{font-size:12.5px;color:#7d9b3f;margin:14px 0 12px;font-weight:500}
+.record-link{text-align:center;margin-top:20px}
+.record-link button{background:none;border:none;color:#8a8f96;font-size:13px;padding:8px;border-bottom:1px solid #dcd9d0;border-radius:0}
+.cele{position:fixed;inset:0;background:rgba(250,249,246,.96);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;cursor:pointer;overflow:hidden}
+.seal{width:118px;height:118px;border-radius:99px;border:1.5px solid #e1703c;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#fff;box-shadow:0 12px 40px rgba(225,112,60,.22);animation:seal .5s cubic-bezier(.2,1.9,.4,1) both}
+.seal .ic{font-size:26px}
+.seal .tx{font-size:12px;font-weight:700;letter-spacing:.18em;color:#e1703c}
+@keyframes seal{0%{transform:scale(2.6);opacity:0}60%{transform:scale(.94);opacity:1}100%{transform:scale(1)}}
+.cele-title{font-size:22px;font-weight:800;margin-top:26px;animation:up .5s .25s both}
+.cele-sub{font-size:14px;color:#5b6068;margin-top:10px;animation:up .5s .4s both;text-align:center;padding:0 24px}
+.cele-lv{font-size:13px;font-weight:700;letter-spacing:.1em;color:#7d9b3f;margin-top:16px;border:1px solid #cfe0a8;background:#f6f9ec;border-radius:99px;padding:6px 18px;animation:up .5s .55s both}
+.cele-tap{font-size:11.5px;color:#b0aea6;margin-top:36px;letter-spacing:.06em;animation:up .5s .9s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.conf{position:absolute;top:-14px;width:7px;height:11px;animation:fall linear both;opacity:.85}
+@keyframes fall{to{transform:translateY(110vh) rotate(680deg)}}
+@media(prefers-reduced-motion:reduce){.conf{display:none}.seal,.cele-title,.cele-sub,.cele-lv,.cele-tap{animation:none}.lit{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">TEAM ALO</div>
+  <h1>중보기도 다이어리</h1>
+  <div class="date" id="dateLine"></div>
+  <div id="view"><div class="loading">불러오는 중…</div></div>
+</div>
+<div id="overlay"></div>
+
+<script>
+// ───────── 데이터 ─────────
+const TOPICS = [
+  "팀ALO가 주의 사랑을 듬뿍 받고, 성령안에서 하나되고 하나님과 더욱 친밀해지길",
+  "한국 청소년 30명 대상으로 수련회를 하는데, 아이들이 하나님을 진하게 만나고 비전을 발견하길",
+  "수질, 오염 등 위생이 좋지 않은데 모두 건강하고 잘 먹고 아프지 않길",
+  "우기 동안 날씨를 주관해주시고 그로 인해 생기는 감정적 기복들로 서로 상처주지 않고, 예수님이 우리에게 주신 관용과 용서가 넘쳐나는 아웃리치 되도록",
+  "믿음을 드러내면 핍박받는 방글라데시의 영혼들이 영적인 눈을 뜨고 예수님을 만나게 되길",
+];
+const LOG_KEY = "prayer-log-v1";
+const LEVELS = [
+  { lv: 1, need: 0, title: "기도 새싹" }, { lv: 2, need: 3, title: "중보 견습생" },
+  { lv: 3, need: 7, title: "무릎 워머" }, { lv: 4, need: 12, title: "골방 지킴이" },
+  { lv: 5, need: 18, title: "새벽 파수꾼" }, { lv: 6, need: 25, title: "중보 마스터" },
+  { lv: 7, need: 35, title: "기도 용사" }, { lv: 8, need: 50, title: "방글라 수호자" },
+  { lv: 9, need: 70, title: "하늘 문지기" }, { lv: 10, need: 100, title: "전설의 중보자" },
+];
+const LIGHT_SPOTS = [
+  [46,30],[58,42],[38,52],[52,62],[62,26],[44,74],[34,40],[66,50],[50,20],[42,62],[58,70],[30,58],
+  [64,36],[48,46],[36,28],[54,84],[40,36],[60,58],[46,90],[32,48],[68,30],[50,74],[38,66],[56,32],
+];
+const CONFETTI = ["#e1703c","#94b04a","#f4b183","#c9dc8f"];
+
+// ───────── 저장소 (artifact storage + 로컬 테스트용 메모리 폴백) ─────────
+const mem = {};
+const store = {
+  async get(key, shared) {
+    if (window.storage) { try { return await window.storage.get(key, shared); } catch { return null; } }
+    return key in mem ? { value: mem[key] } : null;
+  },
+  async set(key, value, shared) {
+    if (window.storage) { try { return await window.storage.set(key, value, shared); } catch { return null; } }
+    mem[key] = value; return { key, value };
+  },
+};
+
+// ───────── 상태 ─────────
+let entries = [], name = "", nameSaved = false;
+let active = null, typed = "", showRecord = false, showGuide = false;
+let holdTimer = null, holdProg = 0;
+
+// ───────── 유틸 ─────────
+const esc = (t) => t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+function todayStr(d = new Date()) {
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function levelInfo(total) {
+  let cur = LEVELS[0];
+  for (const l of LEVELS) if (total >= l.need) cur = l;
+  return cur;
+}
+async function loadLog() {
+  const r = await store.get(LOG_KEY, true);
+  if (!r) return [];
+  try { return JSON.parse(r.value).entries || []; } catch { return []; }
+}
+async function saveEntry(entry) {
+  const list = await loadLog();
+  list.push(entry);
+  await store.set(LOG_KEY, JSON.stringify({ entries: list }), true);
+  return list;
+}
+function stats(name) {
+  const today = todayStr();
+  const mine = entries.filter((e) => e.name === name);
+  const dates = new Set(mine.map((e) => e.date));
+  let streak = 0;
+  const d = new Date();
+  if (!dates.has(todayStr(d))) d.setDate(d.getDate() - 1);
+  while (dates.has(todayStr(d))) { streak++; d.setDate(d.getDate() - 1); }
+  const todayMine = mine.filter((e) => e.date === today);
+  const exp = mine.reduce((a, e) => a + (e.exp || 1), 0);
+  return { name, total: exp, count: mine.length, streak, todayTopics: new Set(todayMine.map((e) => e.topic)) };
+}
+
+// ───────── 렌더 ─────────
+const view = document.getElementById("view");
+document.getElementById("dateLine").textContent =
+  new Date().toLocaleDateString("ko-KR", { year:"numeric", month:"long", day:"numeric", weekday:"long" });
+
+function mapSVG(count) {
+  const lit = Math.min(count, LIGHT_SPOTS.length);
+  let dots = "";
+  for (let i = 0; i < lit; i++) {
+    const [x, y] = LIGHT_SPOTS[i];
+    dots += `<circle cx="${x+55}" cy="${y+14}" r="5.5" fill="#ffe58a" opacity=".4"/>
+             <circle cx="${x+55}" cy="${y+14}" r="1.9" class="lit" style="animation-delay:${(i%6)*0.4}s"/>`;
+  }
+  const cap = count === 0 ? "오늘의 첫 불빛을 기다리고 있어요" : `오늘 ${count}번의 기도 — 방글라데시에 ${lit}개의 불빛`;
+  return `<div class="map-box">
+    <svg viewBox="0 0 220 150" class="map-svg" aria-label="방글라데시와 주변 지역 기도 지도">
+      <rect x="0" y="0" width="220" height="150" rx="12" fill="#dde8ec"/>
+      <path d="M0,0 L190,0 L190,58 L168,72 L150,80 L120,90 L100,100 L80,108 L60,104 L40,112 L20,108 L0,112 Z" fill="#eae7dd" stroke="#d6d2c5" stroke-width="1"/>
+      <path d="M190,36 L220,32 L220,150 L176,150 L166,118 L174,94 L184,66 Z" fill="#e3dfd2" stroke="#d6d2c5" stroke-width="1"/>
+      <path d="M93,22 L107,18 L115,26 L127,24 L135,36 L131,50 L139,58 L135,76 L125,74 L127,90 L119,106 L113,96 L107,110 L101,118 L97,102 L89,106 L85,88 L77,84 L81,68 L73,60 L79,46 L75,34 L85,30 Z" fill="#f0863f" stroke="#fff" stroke-width="1.2"/>
+      ${dots}
+      <text x="34" y="46" font-size="10" fill="#9a968a">인도</text>
+      <text x="181" y="120" font-size="9" fill="#9a968a">미얀마</text>
+      <text x="106" y="140" font-size="9" fill="#7fa0ad" letter-spacing="2" text-anchor="middle">벵골만</text>
+      <text x="106" y="68" font-size="9.5" fill="#ffffff" font-weight="700" text-anchor="middle">방글라데시</text>
+    </svg>
+    <div class="map-cap">${cap}</div>
+  </div>`;
+}
+
+function renderName() {
+  view.innerHTML = `<div class="card">
+    <p class="intro">TEAM ALO 방글라데시 아웃리치를 위한 중보기도 공간이에요.<br>
+    매일 올라오는 기도제목을 <b>따라 적으며</b> 함께 기도합니다.<br>
+    닉네임을 입력하면 기도 기록이 팀원들과 함께 남아요.</p>
+    <div style="display:flex;gap:8px">
+      <input id="nameInput" style="flex:1" placeholder="닉네임" maxlength="20" value="${esc(name)}">
+      <button id="nameBtn">시작하기</button>
+    </div>
+  </div>`;
+  const input = document.getElementById("nameInput");
+  const go = async () => {
+    const n = input.value.trim();
+    if (!n) return;
+    name = n; nameSaved = true;
+    await store.set("my-name", n);
+    render();
+  };
+  document.getElementById("nameBtn").onclick = go;
+  input.onkeydown = (e) => { if (e.key === "Enter") go(); };
+  input.focus();
+}
+
+function renderPray() {
+  const target = TOPICS[active];
+  view.innerHTML = `<div class="card">
+    <div class="typing-label">PRAYER ${active+1} — 한 글자씩 따라 적으며 기도해요</div>
+    <div class="typing-target" id="diff"></div>
+    <textarea id="typeBox" placeholder="여기에 따라 적어주세요" spellcheck="false"></textarea>
+    <div class="actions">
+      <button class="ghost" id="backBtn">돌아가기</button>
+      <button id="doneBtn" disabled>끝까지 적어주세요 (+2)</button>
+    </div>
+    <div class="or"><span>바쁘거나 타이핑이 어려우면</span></div>
+    <button class="hold-btn" id="holdBtn">
+      <span class="hold-fill" id="holdFill"></span>
+      <span class="hold-label" id="holdLabel">🙏 3초 꾹 눌러서 마음으로 기도 (+1)</span>
+    </button>
+  </div>`;
+
+  const box = document.getElementById("typeBox");
+  const diff = document.getElementById("diff");
+  const doneBtn = document.getElementById("doneBtn");
+
+  const drawDiff = () => {
+    typed = box.value;
+    let html = "";
+    for (let i = 0; i < target.length; i++) {
+      let cls = "u";
+      if (i < typed.length) cls = typed[i] === target[i] ? "ok" : "no";
+      else if (i === typed.length) cls = "cur";
+      html += `<span class="ch ${cls}">${esc(target[i])}</span>`;
+    }
+    diff.innerHTML = html;
+    const done = typed === target;
+    doneBtn.disabled = !done;
+    doneBtn.textContent = done ? "기도 완료 +2" : "끝까지 적어주세요 (+2)";
+  };
+  box.oninput = drawDiff;
+  drawDiff();
+  box.focus();
+
+  document.getElementById("backBtn").onclick = () => { active = null; typed = ""; cancelHold(); render(); };
+  doneBtn.onclick = () => complete("typed");
+
+  const holdBtn = document.getElementById("holdBtn");
+  holdBtn.addEventListener("pointerdown", startHold);
+  holdBtn.addEventListener("pointerup", cancelHold);
+  holdBtn.addEventListener("pointerleave", cancelHold);
+  holdBtn.addEventListener("contextmenu", (e) => e.preventDefault());
+}
+
+function startHold() {
+  if (holdTimer) return;
+  const fill = document.getElementById("holdFill");
+  const label = document.getElementById("holdLabel");
+  label.textContent = "기도하는 중… 🙏";
+  holdTimer = setInterval(() => {
+    holdProg += 100 / 60; // 3초
+    if (fill) fill.style.width = holdProg + "%";
+    if (holdProg >= 100) {
+      clearInterval(holdTimer); holdTimer = null; holdProg = 0;
+      complete("quick");
+    }
+  }, 50);
+}
+function cancelHold() {
+  if (holdTimer) { clearInterval(holdTimer); holdTimer = null; }
+  holdProg = 0;
+  const fill = document.getElementById("holdFill");
+  const label = document.getElementById("holdLabel");
+  if (fill) fill.style.width = "0%";
+  if (label) label.textContent = "🙏 3초 꾹 눌러서 마음으로 기도 (+1)";
+}
+
+async function complete(mode) {
+  const beforeLv = levelInfo(stats(name).total).lv;
+  const exp = mode === "typed" ? 2 : 1;
+  const entry = {
+    id: Date.now() + "-" + Math.random().toString(36).slice(2,7),
+    name, topic: active + 1, date: todayStr(), ts: Date.now(), mode, exp,
+  };
+  try { entries = await saveEntry(entry); } catch { entries.push(entry); }
+  const after = stats(name);
+  const afterInfo = levelInfo(after.total);
+  const cel = {
+    exp,
+    allDone: after.todayTopics.size >= 5,
+    levelUp: afterInfo.lv > beforeLv ? afterInfo : null,
+  };
+  active = null; typed = ""; cancelHold();
+  render();
+  showCelebrate(cel);
+}
+
+function showCelebrate(c) {
+  let conf = "";
+  for (let i = 0; i < 30; i++) {
+    conf += `<span class="conf" style="left:${(i*3.4+2)%100}%;background:${CONFETTI[i%CONFETTI.length]};animation-duration:${1.7+(i%5)*0.35}s;animation-delay:${(i%7)*0.12}s;border-radius:${i%3===0?'99px':'2px'}"></span>`;
+  }
+  const title = c.allDone ? "오늘의 기도, 모두 완주" : `기도가 올려졌습니다 +${c.exp} EXP`;
+  const sub = c.allDone
+    ? `${esc(name)}님이 오늘 다섯 개의 기도제목을 모두 품었어요`
+    : `${esc(name)}님의 기도가 방글라데시에 불빛 하나를 밝혔어요`;
+  const lvup = c.levelUp ? `<div class="cele-lv">LEVEL UP — Lv.${c.levelUp.lv} ${c.levelUp.title}</div>` : "";
+  const ov = document.getElementById("overlay");
+  ov.innerHTML = `<div class="cele" id="celeBox">${conf}
+    <div class="seal"><span class="ic">🕯️</span><span class="tx">${c.allDone ? "완주" : "AMEN"}</span></div>
+    <div class="cele-title">${title}</div>
+    <div class="cele-sub">${sub}</div>
+    ${lvup}
+    <div class="cele-tap">화면을 누르면 닫힙니다</div>
+  </div>`;
+  document.getElementById("celeBox").onclick = () => { ov.innerHTML = ""; };
+}
+
+function renderMain() {
+  const today = todayStr();
+  const todayEntries = entries.filter((e) => e.date === today);
+  const my = stats(name);
+  const myLv = levelInfo(my.total);
+  const allNames = [...new Set(entries.map((e) => e.name))];
+  const ranking = allNames.map(stats).sort((a,b) => b.total - a.total || b.streak - a.streak);
+
+  const dots = TOPICS.map((_,i) => `<i class="${my.todayTopics.has(i+1)?'on':''}"></i>`).join("");
+
+  const guide = showGuide ? `<div class="card guide">
+    <div class="guide-title">이렇게 기도해요</div>
+    <ol>
+      <li>아래 <b>기도제목 카드</b>를 하나 눌러요</li>
+      <li>기도제목을 <b>한 글자씩 따라 적으며</b> 기도하거나 (+2 EXP), 바쁘면 <b>3초 꾹 눌러</b> 마음으로 기도해요 (+1 EXP)</li>
+      <li>완료하면 방글라데시 지도에 불빛이 켜지고, 내 이름이 기도 릴레이에 올라가요</li>
+    </ol>
+    <p class="guide-p">매일 5개를 모두 적으면 완주 ⭐ 기도가 쌓일수록 레벨도 올라가요.</p>
+    <div style="text-align:right"><button id="guideClose">알겠어요!</button></div>
+  </div>` : "";
+
+  const relayRows = ranking.length === 0
+    ? `<div class="empty">아직 기록이 없어요 — 첫 주자가 되어주세요!</div>`
+    : (showRecord ? ranking : ranking.slice(0,3)).map((s,i) => {
+        const lv = levelInfo(s.total);
+        const medal = i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
+        return `<div class="rk-row ${s.name===name?'me':''}">
+          <span class="m">${medal}</span>
+          <span><span class="nm">${esc(s.name)}</span><span class="lvt">Lv.${lv.lv} ${lv.title}</span></span>
+          <span class="s">EXP <b>${s.total}</b>${s.streak>1?` · ${s.streak}일 연속`:""}</span>
+        </div>`;
+      }).join("");
+
+  const topics = TOPICS.map((t,i) => {
+    const who = [...new Set(todayEntries.filter((e) => e.topic === i+1).map((e) => e.name))];
+    const mineDone = my.todayTopics.has(i+1);
+    const names = who.length ? `<div class="names">${who.map((n) => `<b>${esc(n)}</b>`).join(" · ")} 기도함</div>` : "";
+    return `<div class="card topic-card" data-topic="${i}">
+      <div class="topic">
+        <span class="num">${String(i+1).padStart(2,"0")}</span>
+        <span class="topic-text">${esc(t)}</span>
+        ${mineDone ? '<span class="check">완료</span>' : ""}
+      </div>${names}
+    </div>`;
+  }).join("");
+
+  view.innerHTML = `
+    ${guide}
+    ${mapSVG(todayEntries.length)}
+    <div class="status">
+      <span><b>${esc(name)}</b> <span class="lv">Lv.${myLv.lv} ${myLv.title}</span></span>
+      ${my.streak > 1 ? `<span>🔥 ${my.streak}일째</span>` : ""}
+      <span class="dots">${dots}</span>
+    </div>
+    <div class="card relay">
+      <div class="relay-head" id="relayHead">
+        <span class="sec-title">🔥 기도 릴레이</span>
+        <span class="relay-toggle">${showRecord ? "접기 ▲" : "전체 보기 ▼"}</span>
+      </div>
+      ${relayRows}
+    </div>
+    ${topics}
+    <div class="record-link"><button id="guideOpen">이용 안내</button></div>`;
+
+  if (showGuide) document.getElementById("guideClose").onclick = async () => {
+    showGuide = false; await store.set("guide-seen","1"); render();
+  };
+  document.getElementById("relayHead").onclick = () => { showRecord = !showRecord; render(); };
+  document.getElementById("guideOpen").onclick = () => { showGuide = true; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+  document.querySelectorAll(".topic-card").forEach((el) => {
+    el.onclick = () => { active = Number(el.dataset.topic); typed = ""; render(); };
+  });
+}
+
+function render() {
+  if (!nameSaved) return renderName();
+  if (active !== null) return renderPray();
+  renderMain();
+}
+
+// ───────── 시작 ─────────
+(async () => {
+  const r = await store.get("my-name");
+  if (r && r.value) { name = r.value; nameSaved = true; }
+  const g = await store.get("guide-seen");
+  if (!g && nameSaved) showGuide = true;
+  if (!nameSaved) showGuide = true;
+  entries = await loadLog();
+  render();
+  setInterval(async () => {
+    if (active !== null) return; // 타이핑 중엔 새로고침 안 함
+    const fresh = await loadLog();
+    if (JSON.stringify(fresh) !== JSON.stringify(entries)) { entries = fresh; render(); }
+  }, 15000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>테스트 플로잉 삭제</title>
+<style>
+  body{font-family:-apple-system,'맑은 고딕',sans-serif;background:#0b0d12;color:#eee;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;padding:20px;text-align:center}
+  .box{background:#161a22;border:1px solid #333;border-radius:14px;padding:28px;max-width:420px}
+  button{margin-top:20px;padding:14px 24px;border-radius:9999px;border:1px solid #d9a355;background:transparent;
+    color:#e8c48a;font-size:15px;cursor:pointer}
+  button:hover{background:rgba(217,163,85,.1)}
+  button:disabled{opacity:.4;cursor:default}
+  #status{margin-top:16px;font-size:13px;color:#9c9484;white-space:pre-line}
+</style>
+</head>
+<body>
+  <div class="box">
+    <p>아래 항목을 삭제합니다:</p>
+    <p style="margin-top:10px;font-weight:600;color:#f4ecd8">📚 현지 아이들 3-11세 학용품세트 28개<br>이름: 융 · 010-8633-0311</p>
+    <button id="del">이 테스트 항목 삭제하기</button>
+    <div id="status"></div>
+  </div>
+<script>
+const FB = "https://teamalo-prayerdiary-default-rtdb.asia-southeast1.firebasedatabase.app";
+const ID = "1785594720559-7y9vo";
+document.getElementById("del").onclick = async () => {
+  const btn = document.getElementById("del");
+  const status = document.getElementById("status");
+  btn.disabled = true;
+  status.textContent = "삭제 중...";
+  try {
+    const res = await fetch(FB + "/flows/" + ID + ".json", { method: "DELETE" });
+    if (res.ok) {
+      status.textContent = "삭제 완료했습니다. 이 파일은 이제 닫으셔도 됩니다.";
+    } else {
+      status.textContent = "삭제 실패 (상태 코드 " + res.status + "). 다시 시도해주세요.";
+      btn.disabled = false;
+    }
+  } catch (err) {
+    status.textContent = "네트워크 오류: " + err.message;
+    btn.disabled = false;
+  }
+};
+</script>
+</body>
+</html>
